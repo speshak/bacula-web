@@ -8,7 +8,7 @@ apt-get upgrade -y && \
 apt-get install -y unzip libpq-dev libzip-dev curl sqlite3 && \
 docker-php-ext-install pgsql pdo_pgsql pdo_mysql gettext zip
 
-COPY ./src/ /var/www/html/
+COPY ./src /var/www/html/
 
 # Install Composer binary
 COPY --from=composer /usr/bin/composer /usr/bin/composer
@@ -23,6 +23,7 @@ RUN mv "$PHP_INI_DIR/php.ini-${ENV}" "$PHP_INI_DIR/php.ini"
 RUN sed -ri -e "s!;date.timezone =!date.timezone = ${PHP_TZ}!g" "$PHP_INI_DIR/php.ini"
 
 COPY config/apache-vhost.config /etc/apache2/sites-enabled/000-default.conf
+COPY config/config.php /var/www/html/application/config/config.php
 
 # locales
 RUN apt-get install -y gettext locales && \
